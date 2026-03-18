@@ -1,0 +1,47 @@
+{
+  "name": "@gsgfs/fernet",
+  "private": false,
+  "version": "0.1.0",
+  "license": "BSD-3-Clause",
+  "author": {
+    "name": "GSGFs"
+  },
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/fernet.umd.cjs",
+  "module": "./dist/fernet.js",
+  "types": "./dist/fernet.d.ts",
+  "exports": {
+    "import": "./dist/fernet.js",
+    "require": "./dist/fernet.umd.cjs",
+    "types": "./dist/fernet.d.ts"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "vitest run",
+    "test:browser": "vitest --browser.enabled --exclude 'tests/**/*.node.test.ts'",
+    "prepublishOnly": "vite build"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.0",
+    "@vitest/browser": "^4.1.0",
+    "@vitest/browser-playwright": "^4.1.0",
+    "jsdom": "^29.0.0",
+    "terser": "^5.46.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.0",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
