@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -26,6 +27,16 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
           cache: 'pnpm'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create Python virtual environment
+        run: |
+          python -m venv .venv
+          ./.venv/bin/pip install cryptography
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
