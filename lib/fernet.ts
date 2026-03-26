@@ -41,7 +41,7 @@ export class Fernet {
       signingKey,
       { name: "HMAC", hash: "SHA-256" },
       false,
-      ["sign"],
+      ["sign", "verify"],
     );
 
     this.defaultTTL = defaultTTL;
@@ -200,11 +200,14 @@ export class Fernet {
     // verity HMAC
     const tokenWithoutHmac = tokenData.subarray(0, -32);
     const hmacKey = await this.signingKey;
-    const calculatedHmac = new Uint8Array(
-      await crypto.subtle.sign("HMAC", hmacKey, tokenWithoutHmac),
+    const isValid = await crypto.subtle.verify(
+      "HMAC",
+      hmacKey,
+      providedHmac,
+      tokenWithoutHmac,
     );
 
-    if (!constantTimeEquals(calculatedHmac, providedHmac)) {
+    if (!isValid) {
       throw new Error("HMAC verification failed");
     }
 
@@ -469,24 +472,4 @@ function toStandardUint8Array(
   }
 
   return targetView;
-}
-
-/**
- * Compares two Uint8Arrays in constant time to prevent timing attacks.
- *
- * @param a - The first Uint8Array to compare.
- * @param b - The second Uint8Array to compare.
- * @returns `true` if the arrays are equal, `false` otherwise.
- */
-function constantTimeEquals(a: Uint8Array, b: Uint8Array): boolean {
-  if (a.length !== b.length) {
-    return false;
-  }
-
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a[i] ^ b[i];
-  }
-  // XOR identical array will eventually return zero.
-  return result === 0;
 }
